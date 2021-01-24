@@ -1,5 +1,5 @@
 //
-//  ServerAccessProtocols.swift
+//  RESTAdapterRequestProtocol.swift
 //  Parcel
 //
 //  Created by Skibin Alexander on 06.05.2020.
@@ -11,7 +11,7 @@ import Alamofire
 /// Базовый интерфейс запроса
 public protocol RESTAdapterRequestProtocol {
     
-    associatedtype Response: СoreRESTResponseProtocol
+    associatedtype Response: RESTAdapterResponseProtocol
     
     /// Адрес обращения запроса
     var url: URL { get set }

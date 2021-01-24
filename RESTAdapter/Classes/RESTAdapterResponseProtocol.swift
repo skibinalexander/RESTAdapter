@@ -1,5 +1,5 @@
 //
-//  ServerAccessProtocols.swift
+//  RESTAdapterResponseProtocol.swift
 //  Parcel
 //
 //  Created by Skibin Alexander on 06.05.2020.
@@ -9,6 +9,6 @@
 import SwiftyJSON
 
 /// Базовый интерфейс отвеса сервера
-public protocol СoreRESTResponseProtocol {
+public protocol RESTAdapterResponseProtocol {
     init(json: JSON)
 }

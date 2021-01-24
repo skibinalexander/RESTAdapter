@@ -1,5 +1,5 @@
 //
-//  ServerAccessProtocols.swift
+//  RESTAdapterResponseModelProtocol.swift
 //  Parcel
 //
 //  Created by Skibin Alexander on 06.05.2020.
