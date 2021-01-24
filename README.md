@@ -14,7 +14,7 @@ RESTAdapter доступен через [CocoaPods](https://cocoapods.org).
 Для установки нужно добавить в начало podfile
 
 ```ruby
-source 'git@bitbucket.org:vtb-privacy/qrspec.git'
+source 'https://github.com/skibinalexander/RESTAdapter.git'
 ```
 
 И в нужные таргеты
