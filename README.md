@@ -1,6 +1,6 @@
 # RESTAdapter
 
-Базовая реализация сетевого слоя для приложения. Содержит методы для отправки запросов и парсинга ответов.
+Базовая реализация абстрактного сетевого слоя для приложения. Содержит методы для отправки запросов и парсинга ответов.
 
 ## Демо проект
 
@@ -11,14 +11,8 @@
 
 RESTAdapter доступен через [CocoaPods](https://cocoapods.org). 
 
-Для установки нужно добавить в начало podfile
+Для установки нужно добавить в podfile
 
 ```ruby
-source 'https://github.com/skibinalexander/RESTAdapter.git'
+pod 'RESTAdapter', :git => 'https://github.com/skibinalexander/RESTAdapter.git/'
 ```
-
-И в нужные таргеты
-```ruby
-pod 'RESTAdapter', '~> 0.1.0'
-```
-Выбрать необходимую версию!
