@@ -14,7 +14,7 @@ public final class RESTAdapter {
     // MARK: - Properties
     
     /// Singletone
-    static let shared: RESTAdapter = RESTAdapter()
+    public static let shared: RESTAdapter = RESTAdapter()
     
     /// Текущая сессия
     private var session: Alamofire.Session
