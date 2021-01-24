@@ -22,7 +22,7 @@ public enum TransportError: Error {
     
     // MARK: - Static Implementation
     //swiftlint:disable:next cyclomatic_complexity superfluous_disable_command
-    static func status(by code: Int?) -> TransportError {
+    public static func status(by code: Int?) -> TransportError {
         guard let code = code else { return .undefined }
         
         switch code {
