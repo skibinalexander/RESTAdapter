@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import REST
+import Pods_RESTAdapter
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {

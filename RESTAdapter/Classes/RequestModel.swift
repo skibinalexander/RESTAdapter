@@ -9,9 +9,9 @@
 import Alamofire
 
 /// Базовый интерфейс запроса
-public protocol RESTAdapterRequestProtocol {
+public protocol RequestModel {
     
-    associatedtype Response: RESTAdapterResponseProtocol
+    associatedtype Response: ResponseModel
     
     /// Адрес обращения запроса
     var url: URL { get set }

@@ -9,6 +9,6 @@
 import SwiftyJSON
 
 /// Базовый интерфейс отвеса сервера
-public protocol RESTAdapterResponseProtocol {
+public protocol ResponseModel {
     init(json: JSON)
 }

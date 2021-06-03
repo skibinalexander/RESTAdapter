@@ -63,7 +63,6 @@
 		2DEA889C25BD9CF6009BCF1A /* RESTAdapter */ = {
 			isa = PBXGroup;
 			children = (
-				2DEA88C825BDA0D3009BCF1A /* ExampleBackendStorage */,
 				2DEA889D25BD9CF6009BCF1A /* AppDelegate.swift */,
 				2DEA889F25BD9CF6009BCF1A /* SceneDelegate.swift */,
 				2DEA88A125BD9CF6009BCF1A /* ViewController.swift */,
@@ -73,13 +72,6 @@
 				2DEA88AB25BD9CFC009BCF1A /* Info.plist */,
 			);
 			path = RESTAdapter;
-			sourceTree = "<group>";
-		};
-		2DEA88C825BDA0D3009BCF1A /* ExampleBackendStorage */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = ExampleBackendStorage;
 			sourceTree = "<group>";
 		};
 		3981EF32AF8753340FA6520B /* Frameworks */ = {

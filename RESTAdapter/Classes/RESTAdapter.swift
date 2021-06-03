@@ -48,7 +48,7 @@ public final class RESTAdapter {
         request: R,
         interceptor: RequestInterceptor? = nil,
         result: @escaping (Result<R.Response, Error>) -> Void
-    ) where R: RESTAdapterRequestProtocol {
+    ) where R: RequestModel {
         session
             .request(
                 request.url,
