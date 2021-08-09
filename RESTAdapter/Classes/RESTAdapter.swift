@@ -18,6 +18,7 @@ public final class RESTAdapter {
     
     /// Текущая сессия
     private var session: Alamofire.Session
+    private var logger: RESTLogger?
     
     // MARK: - Lifecycle
     
@@ -60,6 +61,9 @@ public final class RESTAdapter {
             )
             .validate(request.validate)
             .responseJSON { responseData in
+                
+                self.logger?.writeResponseLog(dataResponse: responseData)
+                
                 switch responseData.result {
                 case .success(let data):
                     result(
