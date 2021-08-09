@@ -22,11 +22,11 @@ public final class RESTAdapter {
     
     // MARK: - Lifecycle
     
-    init() {
+    public init() {
         session = Alamofire.Session.default
     }
     
-    init(
+    public init(
         session: Alamofire.Session,
         logger: RESTLogger? = nil
     ) {
@@ -73,6 +73,38 @@ public final class RESTAdapter {
                         .success(
                             R.Response(json: JSON(data))
                         )
+                    )
+                case .failure(let error):
+                    result(
+                        .failure(error)
+                    )
+                }
+            }
+    }
+    
+    public func executeData<R>(
+        request: R,
+        interceptor: RequestInterceptor? = nil,
+        result: @escaping (Result<R.Response, Error>) -> Void
+    ) where R: RequestModel {
+        session
+            .request(
+                request.url,
+                method: request.method,
+                parameters: request.parameters,
+                encoding: request.encoding,
+                headers: request.headers,
+                interceptor: interceptor
+            )
+            .validate(request.validate)
+            .response { responseData in
+                
+                self.logger?.writeResponseLog(dataResponse: responseData)
+                
+                switch responseData.result {
+                case .success(let data):
+                    result(
+                        .success(R.Response(json: JSON(data ?? Data())))
                     )
                 case .failure(let error):
                     result(
