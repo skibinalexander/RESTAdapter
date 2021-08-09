@@ -24,6 +24,7 @@ public final class RESTAdapter {
     
     public init() {
         session = Alamofire.Session.default
+        logger = nil
     }
     
     public init(
@@ -31,6 +32,7 @@ public final class RESTAdapter {
         logger: RESTLogger? = nil
     ) {
         self.session = session
+        self.logger = logger
     }
     
     // MARK: - Public Implementation
@@ -39,6 +41,12 @@ public final class RESTAdapter {
     /// - Parameter session: Обновлённая сессия адаптера
     public func update(session: Alamofire.Session) {
         self.session = session
+    }
+    
+    /// Обновить рабочую сессию адаптера
+    /// - Parameter session: Обновлённая сессия адаптера
+    public func update(logger: RESTLogger) {
+        self.logger = logger
     }
     
     /// Метод для выполнения всех запросов
