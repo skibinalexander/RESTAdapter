@@ -1,6 +1,6 @@
 PODS:
   - Alamofire (5.4.1)
-  - RESTAdapter (0.1.0):
+  - RESTAdapter (0.0.4):
     - Alamofire (~> 5.0)
     - SwiftyJSON (~> 4.0)
   - SwiftyJSON (4.3.0)
@@ -19,7 +19,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Alamofire: 2291f7d21ca607c491dd17642e5d40fdcda0e65c
-  RESTAdapter: af9effe5fb06b0fd66875e7827f84ec5aa7c9a3a
+  RESTAdapter: 9c4cd1301558c0ddc808257bfa2e01bc3f982caf
   SwiftyJSON: 6faa0040f8b59dead0ee07436cbf76b73c08fd08
 
 PODFILE CHECKSUM: 057b9ea08f0e472ba385c091550961d295d36414
