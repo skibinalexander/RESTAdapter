@@ -26,7 +26,10 @@ public final class RESTAdapter {
         session = Alamofire.Session.default
     }
     
-    init(session: Alamofire.Session) {
+    init(
+        session: Alamofire.Session,
+        logger: RESTLogger? = nil
+    ) {
         self.session = session
     }
     
