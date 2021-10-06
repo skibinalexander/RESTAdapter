@@ -59,6 +59,7 @@ public final class RESTAdapter {
     public func execute<R>(
         request: R,
         interceptor: RequestInterceptor? = nil,
+        validator: ValidatorModel,
         result: @escaping (Result<R.Response, Error>) -> Void
     ) where R: RequestModel {
         session
@@ -70,7 +71,7 @@ public final class RESTAdapter {
                 headers: request.headers,
                 interceptor: interceptor
             )
-            .validate(request.validate)
+            .validate(validator.validate)
             .responseJSON { responseData in
                 
                 self.logger?.writeResponseLog(dataResponse: responseData)
@@ -93,6 +94,7 @@ public final class RESTAdapter {
     public func executeData<R>(
         request: R,
         interceptor: RequestInterceptor? = nil,
+        validator: ValidatorModel,
         result: @escaping (Result<R.Response, Error>) -> Void
     ) where R: RequestModel {
         session
@@ -104,7 +106,7 @@ public final class RESTAdapter {
                 headers: request.headers,
                 interceptor: interceptor
             )
-            .validate(request.validate)
+            .validate(validator.validate)
             .response { responseData in
                 
                 self.logger?.writeResponseLog(dataResponse: responseData)

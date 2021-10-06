@@ -8,6 +8,13 @@
 
 import Alamofire
 
+public protocol ApiPath {
+    
+    /// Получить путь к АПИ
+    var path: String { get }
+    
+}
+
 /// Базовый интерфейс запроса
 public protocol RequestModel {
     
@@ -27,14 +34,5 @@ public protocol RequestModel {
     
     /// Способ отправки параметров запроса
     var encoding: ParameterEncoding { get set }
-    
-    /// Валидация запроса
-    ///
-    /// - Parameters:
-    ///   - request: The metadata associated with the request.
-    ///   - response: The metadata associated with the response.
-    ///   - data: Data, received from server.
-    /// - Returns: Validation result. Error or success.
-    func validate(_ request: URLRequest?, _ response: HTTPURLResponse, _ data: Data?) -> Result<Void, Error>
     
 }
