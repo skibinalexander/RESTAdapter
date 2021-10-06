@@ -9,7 +9,7 @@
 import SwiftyJSON
 
 /// Базовый интерфейс модели ответа сервера
-public protocol TransferModel {
+public protocol DataModel {
     
     /// Инициализатор
     /// - Parameter json: Data JSON object
