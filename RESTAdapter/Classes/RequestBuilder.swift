@@ -46,7 +46,7 @@ public final class RequestBuilder<R: ResponseModel> {
     
     // MARK: - Init
     
-    init(
+    public init(
         apiPath: ApiPath,
         headers: HTTPHeaders? = nil,
         parameters: Parameters? = nil,
