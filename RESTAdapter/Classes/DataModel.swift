@@ -13,10 +13,10 @@ public protocol DataModel {
     
     /// Инициализатор
     /// - Parameter json: Data JSON object
-    public init(json: JSON)
+    init(json: JSON)
     
     /// Опциональный инициализатор
     /// - Parameter json: Data JSON object optional
-    public init?(json: JSON?)
+    init?(json: JSON?)
     
 }
