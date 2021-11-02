@@ -56,12 +56,12 @@ public final class RESTAdapter {
     /// - Parameter success: Получение успешного выполнения запроса после выполнения валидаций
     /// - Parameter failure: Получение запроса с ошибкой после выполнения валидаций
     /// - Parameter result: Completion result работы запроса
-    public func execute<R>(
-        request: R,
+    public func executeJSON<Request, Response>(
+        request: Request,
         interceptor: RequestInterceptor? = nil,
         validator: ValidatorModel,
-        result: @escaping (Result<R.Response, Error>) -> Void
-    ) where R: RequestModel {
+        result: @escaping (Result<Response, Error>) -> Void
+    ) where Request: RequestModel, Response: ResponseModel {
         session
             .request(
                 request.url,
@@ -73,30 +73,23 @@ public final class RESTAdapter {
             )
             .validate(validator.validate)
             .responseJSON { responseData in
-                
                 self.logger?.writeResponseLog(dataResponse: responseData)
                 
                 switch responseData.result {
                 case .success(let data):
-                    result(
-                        .success(
-                            R.Response(json: JSON(data))
-                        )
-                    )
+                    result(.success(Response(json: JSON(data))))
                 case .failure(let error):
-                    result(
-                        .failure(error)
-                    )
+                    result(.failure(error))
                 }
             }
     }
     
-    public func executeData<R>(
-        request: R,
+    public func executeData<Request>(
+        request: Request,
         interceptor: RequestInterceptor? = nil,
         validator: ValidatorModel,
-        result: @escaping (Result<R.Response, Error>) -> Void
-    ) where R: RequestModel {
+        result: @escaping (Result<Data?, Error>) -> Void
+    ) where Request: RequestModel {
         session
             .request(
                 request.url,
@@ -108,18 +101,13 @@ public final class RESTAdapter {
             )
             .validate(validator.validate)
             .response { responseData in
-                
                 self.logger?.writeResponseLog(dataResponse: responseData)
                 
                 switch responseData.result {
                 case .success(let data):
-                    result(
-                        .success(R.Response(json: JSON(data ?? Data())))
-                    )
+                    result(.success(data))
                 case .failure(let error):
-                    result(
-                        .failure(error)
-                    )
+                    result(.failure(error))
                 }
             }
     }

@@ -8,17 +8,16 @@
 
 import Alamofire
 
+/// Протокол реализации Api
 public protocol ApiPath {
     
     /// Получить путь к АПИ
     var path: String { get }
-    
+
 }
 
 /// Базовый интерфейс запроса
 public protocol RequestModel {
-    
-    associatedtype Response: ResponseModel
     
     /// Адрес обращения запроса
     var url: URL { get set }

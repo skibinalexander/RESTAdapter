@@ -10,5 +10,13 @@ import SwiftyJSON
 
 /// Базовый интерфейс отвеса сервера
 public protocol ResponseModel {
+    
+    /// Инициализатор
+    /// - Parameter json: Data JSON object
     init(json: JSON)
+    
+    /// Опциональный инициализатор
+    /// - Parameter json: Data JSON object optional
+    init?(json: JSON?)
+    
 }
