@@ -84,6 +84,41 @@ public final class RESTAdapter {
             }
     }
     
+    /// Метод для выполнения всех запросов
+    ///
+    /// - Parameter request: Модель запроса
+    /// - Parameter interceptor: Интерцептор запроса, для разделения логики перед отправкой запроса
+    /// - Parameter success: Получение успешного выполнения запроса после выполнения валидаций
+    /// - Parameter failure: Получение запроса с ошибкой после выполнения валидаций
+    /// - Parameter result: Completion result работы запроса
+    public func executeJSON<Request>(
+        request: Request,
+        interceptor: RequestInterceptor? = nil,
+        validator: ValidatorModel,
+        result: @escaping (Result<Void, Error>) -> Void
+    ) where Request: RequestModel {
+        session
+            .request(
+                request.url,
+                method: request.method,
+                parameters: request.parameters,
+                encoding: request.encoding,
+                headers: request.headers,
+                interceptor: interceptor
+            )
+            .validate(validator.validate)
+            .responseJSON { responseData in
+                self.logger?.writeResponseLog(dataResponse: responseData)
+                
+                switch responseData.result {
+                case .success(_):
+                    result(.success(()))
+                case .failure(let error):
+                    result(.failure(error))
+                }
+            }
+    }
+    
     public func executeData<Request>(
         request: Request,
         interceptor: RequestInterceptor? = nil,
