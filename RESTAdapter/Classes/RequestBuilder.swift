@@ -9,12 +9,10 @@ import Alamofire
 import SwiftyJSON
 
 /// "Строитель" модели запроса
-public final class RequestBuilder<R: ResponseModel> {
+public final class RequestBuilder {
     
     /// Модель запроса
     public class Request: RequestModel {
-        
-        public typealias Response = R
         
         public var url: URL
         public var method: Alamofire.HTTPMethod
@@ -60,7 +58,7 @@ public final class RequestBuilder<R: ResponseModel> {
     
     // MARK: - Implementation
     
-    public func buildGetRequest() -> Request {
+    public func get() -> Request {
         Request(
             url: URL(string: apiPath.path)!,
             method: .get,
@@ -70,7 +68,7 @@ public final class RequestBuilder<R: ResponseModel> {
         )
     }
     
-    public func buildPostRequest() -> Request {
+    public func post() -> Request {
         Request(
             url: URL(string: apiPath.path)!,
             method: .post,
@@ -80,7 +78,7 @@ public final class RequestBuilder<R: ResponseModel> {
         )
     }
     
-    public func buildPutRequest() -> Request {
+    public func put() -> Request {
         Request(
             url: URL(string: apiPath.path)!,
             method: .put,
@@ -90,7 +88,7 @@ public final class RequestBuilder<R: ResponseModel> {
         )
     }
     
-    func buildPatchRequest() -> Request {
+    func patch() -> Request {
         Request(
             url: URL(string: apiPath.path)!,
             method: .patch,
