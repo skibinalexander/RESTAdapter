@@ -88,7 +88,7 @@ public final class RequestBuilder {
         )
     }
     
-    func patch() -> Request {
+    public func patch() -> Request {
         Request(
             url: URL(string: apiPath.path)!,
             method: .patch,
