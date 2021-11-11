@@ -147,4 +147,32 @@ public final class RESTAdapter {
             }
     }
     
+    public func executeVoid<Request>(
+        request: Request,
+        interceptor: RequestInterceptor? = nil,
+        validator: ValidatorModel,
+        result: @escaping (Result<Void, Error>) -> Void
+    ) where Request: RequestModel {
+        session
+            .request(
+                request.url,
+                method: request.method,
+                parameters: request.parameters,
+                encoding: request.encoding,
+                headers: request.headers,
+                interceptor: interceptor
+            )
+            .validate(validator.validate)
+            .response { responseData in
+                self.logger?.writeResponseLog(dataResponse: responseData)
+                
+                switch responseData.result {
+                case .success(let data):
+                    result(.success(()))
+                case .failure(let error):
+                    result(.failure(error))
+                }
+            }
+    }
+    
 }
