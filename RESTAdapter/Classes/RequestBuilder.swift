@@ -98,4 +98,14 @@ public final class RequestBuilder {
         )
     }
     
+    public func delete() -> Request {
+        Request(
+            url: URL(string: apiPath.path)!,
+            method: .delete,
+            headers: headers,
+            parameters: parameters,
+            encoding: encoding
+        )
+    }
+    
 }
