@@ -60,7 +60,7 @@ public final class RequestBuilder {
     
     public func get() -> Request {
         Request(
-            url: URL(string: apiPath.path)!,
+            url: try! apiPath.path.asURL(),
             method: .get,
             headers: headers,
             parameters: parameters,
@@ -70,7 +70,7 @@ public final class RequestBuilder {
     
     public func post() -> Request {
         Request(
-            url: URL(string: apiPath.path)!,
+            url: try! apiPath.path.asURL(),
             method: .post,
             headers: headers,
             parameters: parameters,
@@ -80,7 +80,7 @@ public final class RequestBuilder {
     
     public func put() -> Request {
         Request(
-            url: URL(string: apiPath.path)!,
+            url: try! apiPath.path.asURL(),
             method: .put,
             headers: headers,
             parameters: parameters,
@@ -90,7 +90,7 @@ public final class RequestBuilder {
     
     public func patch() -> Request {
         Request(
-            url: URL(string: apiPath.path)!,
+            url: try! apiPath.path.asURL(),
             method: .patch,
             headers: headers,
             parameters: parameters,
@@ -100,7 +100,7 @@ public final class RequestBuilder {
     
     public func delete() -> Request {
         Request(
-            url: URL(string: apiPath.path)!,
+            url: try! apiPath.path.asURL(),
             method: .delete,
             headers: headers,
             parameters: parameters,
