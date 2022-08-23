@@ -20,5 +20,11 @@ extension AFDataResponse: LogResponse {}
 
 /// Протокол для логгеров используемых в ServerAccess
 public protocol RESTLogger {
+    func writeRequestLog(dataResponse: LogResponse)
     func writeResponseLog(dataResponse: LogResponse)
+}
+
+extension RESTLogger {
+    func writeRequestLog(dataResponse: LogResponse) {}
+    func writeResponseLog(dataResponse: LogResponse) {}
 }

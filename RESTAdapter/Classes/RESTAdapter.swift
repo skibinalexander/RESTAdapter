@@ -9,6 +9,8 @@
 import Alamofire
 import SwiftyJSON
 
+public typealias Validate = (_ request: URLRequest?, _ response: HTTPURLResponse, _ data: Data?) -> Result<Void, Error>
+
 public final class RESTAdapter {
     
     // MARK: - Properties
@@ -59,7 +61,8 @@ public final class RESTAdapter {
     public func execute<R>(
         request: R,
         interceptor: RequestInterceptor? = nil,
-        validator: ValidatorModel,
+        validator: @escaping Validate,
+        status: ((Int?) -> Void)? = nil,
         result: @escaping (Result<R.Response, Error>) -> Void
     ) where R: RequestModel {
         session
@@ -71,22 +74,17 @@ public final class RESTAdapter {
                 headers: request.headers,
                 interceptor: interceptor
             )
-            .validate(validator.validate)
+            .validate(validator)
             .responseJSON { responseData in
-                
                 self.logger?.writeResponseLog(dataResponse: responseData)
+                
+                status?(responseData.response?.statusCode)
                 
                 switch responseData.result {
                 case .success(let data):
-                    result(
-                        .success(
-                            R.Response(json: JSON(data))
-                        )
-                    )
+                    result(.success(R.Response(json: JSON(data))))
                 case .failure(let error):
-                    result(
-                        .failure(error)
-                    )
+                    result(.failure(error))
                 }
             }
     }
@@ -94,7 +92,8 @@ public final class RESTAdapter {
     public func executeData<R>(
         request: R,
         interceptor: RequestInterceptor? = nil,
-        validator: ValidatorModel,
+        validator: @escaping Validate,
+        status: ((Int?) -> Void)? = nil,
         result: @escaping (Result<R.Response, Error>) -> Void
     ) where R: RequestModel {
         session
@@ -106,10 +105,11 @@ public final class RESTAdapter {
                 headers: request.headers,
                 interceptor: interceptor
             )
-            .validate(validator.validate)
+            .validate(validator)
             .response { responseData in
-                
                 self.logger?.writeResponseLog(dataResponse: responseData)
+                
+                status?(responseData.response?.statusCode)
                 
                 switch responseData.result {
                 case .success(let data):
