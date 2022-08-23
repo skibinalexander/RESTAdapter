@@ -63,8 +63,8 @@ public final class RESTAdapter {
         request: Request,
         interceptor: RequestInterceptor? = nil,
         validator: @escaping Validate,
-        status: Status,
-        result: @escaping (Result<Response, Error>) -> Void
+        status: Status = nil,
+        result: ((Result<Response, Error>) -> Void)? = nil
     ) where Request: RequestModel, Response: ResponseModel {
         session
             .request(
@@ -83,47 +83,9 @@ public final class RESTAdapter {
                 
                 switch responseData.result {
                 case .success(let data):
-                    result(.success(Response(json: JSON(data))))
+                    result?(.success(Response(json: JSON(data))))
                 case .failure(let error):
-                    result(.failure(error))
-                }
-            }
-    }
-    
-    /// Метод для выполнения всех запросов
-    ///
-    /// - Parameter request: Модель запроса
-    /// - Parameter interceptor: Интерцептор запроса, для разделения логики перед отправкой запроса
-    /// - Parameter success: Получение успешного выполнения запроса после выполнения валидаций
-    /// - Parameter failure: Получение запроса с ошибкой после выполнения валидаций
-    /// - Parameter result: Completion result работы запроса
-    public func executeJSON<Request>(
-        request: Request,
-        interceptor: RequestInterceptor? = nil,
-        validator: @escaping Validate,
-        status: Status,
-        result: @escaping (Result<Void, Error>) -> Void
-    ) where Request: RequestModel {
-        session
-            .request(
-                request.url,
-                method: request.method,
-                parameters: request.parameters,
-                encoding: request.encoding,
-                headers: request.headers,
-                interceptor: interceptor
-            )
-            .validate(validator)
-            .responseJSON { responseData in
-                self.logger?.writeResponseLog(dataResponse: responseData)
-                
-                status?(responseData.response?.statusCode)
-                
-                switch responseData.result {
-                case .success(_):
-                    result(.success(()))
-                case .failure(let error):
-                    result(.failure(error))
+                    result?(.failure(error))
                 }
             }
     }
@@ -132,8 +94,8 @@ public final class RESTAdapter {
         request: Request,
         interceptor: RequestInterceptor? = nil,
         validator: @escaping Validate,
-        status: Status,
-        result: @escaping (Result<Data?, Error>) -> Void
+        status: Status = nil,
+        result: ((Result<Data?, Error>) -> Void)? = nil
     ) where Request: RequestModel {
         session
             .request(
@@ -152,9 +114,9 @@ public final class RESTAdapter {
                 
                 switch responseData.result {
                 case .success(let data):
-                    result(.success(data))
+                    result?(.success(data))
                 case .failure(let error):
-                    result(.failure(error))
+                    result?(.failure(error))
                 }
             }
     }
@@ -163,8 +125,8 @@ public final class RESTAdapter {
         request: Request,
         interceptor: RequestInterceptor? = nil,
         validator: @escaping Validate,
-        status: Status,
-        result: @escaping (Result<Void, Error>) -> Void
+        status: Status = nil,
+        result: ((Result<Void, Error>) -> Void)? = nil
     ) where Request: RequestModel {
         session
             .request(
@@ -183,9 +145,9 @@ public final class RESTAdapter {
                 
                 switch responseData.result {
                 case .success(_):
-                    result(.success(()))
+                    result?(.success(()))
                 case .failure(let error):
-                    result(.failure(error))
+                    result?(.failure(error))
                 }
             }
     }
