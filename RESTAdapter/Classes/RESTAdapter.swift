@@ -9,6 +9,9 @@
 import Alamofire
 import SwiftyJSON
 
+public typealias Validate = (_ request: URLRequest?, _ response: HTTPURLResponse, _ data: Data?) -> Result<Void, Error>
+public typealias Status = ((Int?) -> Void)?
+
 public final class RESTAdapter {
     
     // MARK: - Properties
@@ -59,7 +62,8 @@ public final class RESTAdapter {
     public func executeJSON<Request, Response>(
         request: Request,
         interceptor: RequestInterceptor? = nil,
-        validator: ValidatorModel,
+        validator: @escaping Validate,
+        status: Status,
         result: @escaping (Result<Response, Error>) -> Void
     ) where Request: RequestModel, Response: ResponseModel {
         session
@@ -71,9 +75,11 @@ public final class RESTAdapter {
                 headers: request.headers,
                 interceptor: interceptor
             )
-            .validate(validator.validate)
+            .validate(validator)
             .responseJSON { responseData in
                 self.logger?.writeResponseLog(dataResponse: responseData)
+                
+                status?(responseData.response?.statusCode)
                 
                 switch responseData.result {
                 case .success(let data):
@@ -94,7 +100,8 @@ public final class RESTAdapter {
     public func executeJSON<Request>(
         request: Request,
         interceptor: RequestInterceptor? = nil,
-        validator: ValidatorModel,
+        validator: @escaping Validate,
+        status: Status,
         result: @escaping (Result<Void, Error>) -> Void
     ) where Request: RequestModel {
         session
@@ -106,9 +113,11 @@ public final class RESTAdapter {
                 headers: request.headers,
                 interceptor: interceptor
             )
-            .validate(validator.validate)
+            .validate(validator)
             .responseJSON { responseData in
                 self.logger?.writeResponseLog(dataResponse: responseData)
+                
+                status?(responseData.response?.statusCode)
                 
                 switch responseData.result {
                 case .success(_):
@@ -122,7 +131,8 @@ public final class RESTAdapter {
     public func executeData<Request>(
         request: Request,
         interceptor: RequestInterceptor? = nil,
-        validator: ValidatorModel,
+        validator: @escaping Validate,
+        status: Status,
         result: @escaping (Result<Data?, Error>) -> Void
     ) where Request: RequestModel {
         session
@@ -134,9 +144,11 @@ public final class RESTAdapter {
                 headers: request.headers,
                 interceptor: interceptor
             )
-            .validate(validator.validate)
+            .validate(validator)
             .response { responseData in
                 self.logger?.writeResponseLog(dataResponse: responseData)
+                
+                status?(responseData.response?.statusCode)
                 
                 switch responseData.result {
                 case .success(let data):
@@ -150,7 +162,8 @@ public final class RESTAdapter {
     public func executeVoid<Request>(
         request: Request,
         interceptor: RequestInterceptor? = nil,
-        validator: ValidatorModel,
+        validator: @escaping Validate,
+        status: Status,
         result: @escaping (Result<Void, Error>) -> Void
     ) where Request: RequestModel {
         session
@@ -162,12 +175,14 @@ public final class RESTAdapter {
                 headers: request.headers,
                 interceptor: interceptor
             )
-            .validate(validator.validate)
+            .validate(validator)
             .response { responseData in
                 self.logger?.writeResponseLog(dataResponse: responseData)
                 
+                status?(responseData.response?.statusCode)
+                
                 switch responseData.result {
-                case .success(let data):
+                case .success(_):
                     result(.success(()))
                 case .failure(let error):
                     result(.failure(error))
