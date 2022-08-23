@@ -10,6 +10,7 @@ import Alamofire
 import SwiftyJSON
 
 public typealias Validate = (_ request: URLRequest?, _ response: HTTPURLResponse, _ data: Data?) -> Result<Void, Error>
+public typealias Status = ((Int?) -> Void)?
 
 public final class RESTAdapter {
     
@@ -58,13 +59,13 @@ public final class RESTAdapter {
     /// - Parameter success: Получение успешного выполнения запроса после выполнения валидаций
     /// - Parameter failure: Получение запроса с ошибкой после выполнения валидаций
     /// - Parameter result: Completion result работы запроса
-    public func execute<R>(
-        request: R,
+    public func executeJSON<Request, Response>(
+        request: Request,
         interceptor: RequestInterceptor? = nil,
         validator: @escaping Validate,
-        status: ((Int?) -> Void)? = nil,
-        result: @escaping (Result<R.Response, Error>) -> Void
-    ) where R: RequestModel {
+        status: Status,
+        result: @escaping (Result<Response, Error>) -> Void
+    ) where Request: RequestModel, Response: ResponseModel {
         session
             .request(
                 request.url,
@@ -82,20 +83,58 @@ public final class RESTAdapter {
                 
                 switch responseData.result {
                 case .success(let data):
-                    result(.success(R.Response(json: JSON(data))))
+                    result(.success(Response(json: JSON(data))))
                 case .failure(let error):
                     result(.failure(error))
                 }
             }
     }
     
-    public func executeData<R>(
-        request: R,
+    /// Метод для выполнения всех запросов
+    ///
+    /// - Parameter request: Модель запроса
+    /// - Parameter interceptor: Интерцептор запроса, для разделения логики перед отправкой запроса
+    /// - Parameter success: Получение успешного выполнения запроса после выполнения валидаций
+    /// - Parameter failure: Получение запроса с ошибкой после выполнения валидаций
+    /// - Parameter result: Completion result работы запроса
+    public func executeJSON<Request>(
+        request: Request,
         interceptor: RequestInterceptor? = nil,
         validator: @escaping Validate,
-        status: ((Int?) -> Void)? = nil,
-        result: @escaping (Result<R.Response, Error>) -> Void
-    ) where R: RequestModel {
+        status: Status,
+        result: @escaping (Result<Void, Error>) -> Void
+    ) where Request: RequestModel {
+        session
+            .request(
+                request.url,
+                method: request.method,
+                parameters: request.parameters,
+                encoding: request.encoding,
+                headers: request.headers,
+                interceptor: interceptor
+            )
+            .validate(validator)
+            .responseJSON { responseData in
+                self.logger?.writeResponseLog(dataResponse: responseData)
+                
+                status?(responseData.response?.statusCode)
+                
+                switch responseData.result {
+                case .success(_):
+                    result(.success(()))
+                case .failure(let error):
+                    result(.failure(error))
+                }
+            }
+    }
+    
+    public func executeData<Request>(
+        request: Request,
+        interceptor: RequestInterceptor? = nil,
+        validator: @escaping Validate,
+        status: Status,
+        result: @escaping (Result<Data?, Error>) -> Void
+    ) where Request: RequestModel {
         session
             .request(
                 request.url,
@@ -113,13 +152,40 @@ public final class RESTAdapter {
                 
                 switch responseData.result {
                 case .success(let data):
-                    result(
-                        .success(R.Response(json: JSON(data ?? Data())))
-                    )
+                    result(.success(data))
                 case .failure(let error):
-                    result(
-                        .failure(error)
-                    )
+                    result(.failure(error))
+                }
+            }
+    }
+    
+    public func executeVoid<Request>(
+        request: Request,
+        interceptor: RequestInterceptor? = nil,
+        validator: @escaping Validate,
+        status: Status,
+        result: @escaping (Result<Void, Error>) -> Void
+    ) where Request: RequestModel {
+        session
+            .request(
+                request.url,
+                method: request.method,
+                parameters: request.parameters,
+                encoding: request.encoding,
+                headers: request.headers,
+                interceptor: interceptor
+            )
+            .validate(validator)
+            .response { responseData in
+                self.logger?.writeResponseLog(dataResponse: responseData)
+                
+                status?(responseData.response?.statusCode)
+                
+                switch responseData.result {
+                case .success(_):
+                    result(.success(()))
+                case .failure(let error):
+                    result(.failure(error))
                 }
             }
     }

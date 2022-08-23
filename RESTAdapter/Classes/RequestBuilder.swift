@@ -9,12 +9,10 @@ import Alamofire
 import SwiftyJSON
 
 /// "Строитель" модели запроса
-public final class RequestBuilder<R: ResponseModel> {
+public final class RequestBuilder {
     
     /// Модель запроса
     public class Request: RequestModel {
-        
-        public typealias Response = R
         
         public var url: URL
         public var method: Alamofire.HTTPMethod
@@ -60,9 +58,9 @@ public final class RequestBuilder<R: ResponseModel> {
     
     // MARK: - Implementation
     
-    public func buildGetRequest() -> Request {
+    public func get() -> Request {
         Request(
-            url: URL(string: apiPath.path)!,
+            url: try! apiPath.path.asURL(),
             method: .get,
             headers: headers,
             parameters: parameters,
@@ -70,9 +68,9 @@ public final class RequestBuilder<R: ResponseModel> {
         )
     }
     
-    public func buildPostRequest() -> Request {
+    public func post() -> Request {
         Request(
-            url: URL(string: apiPath.path)!,
+            url: try! apiPath.path.asURL(),
             method: .post,
             headers: headers,
             parameters: parameters,
@@ -80,9 +78,9 @@ public final class RequestBuilder<R: ResponseModel> {
         )
     }
     
-    public func buildPutRequest() -> Request {
+    public func put() -> Request {
         Request(
-            url: URL(string: apiPath.path)!,
+            url: try! apiPath.path.asURL(),
             method: .put,
             headers: headers,
             parameters: parameters,
@@ -90,10 +88,20 @@ public final class RequestBuilder<R: ResponseModel> {
         )
     }
     
-    func buildPatchRequest() -> Request {
+    public func patch() -> Request {
         Request(
-            url: URL(string: apiPath.path)!,
+            url: try! apiPath.path.asURL(),
             method: .patch,
+            headers: headers,
+            parameters: parameters,
+            encoding: encoding
+        )
+    }
+    
+    public func delete() -> Request {
+        Request(
+            url: try! apiPath.path.asURL(),
+            method: .delete,
             headers: headers,
             parameters: parameters,
             encoding: encoding
