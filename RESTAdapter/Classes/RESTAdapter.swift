@@ -152,4 +152,37 @@ public final class RESTAdapter {
             }
     }
     
+    public func uploadFormData<Request, Response>(
+        multipartFormData: MultipartFormData,
+        request: Request,
+        interceptor: RequestInterceptor? = nil,
+        validator: @escaping Validate,
+        status: Status = nil,
+        progress: @escaping ((Progress) -> Void),
+        result: ((Result<Response, Error>) -> Void)? = nil
+    ) where Request: RequestModel, Response: ResponseModel {
+        session
+            .upload(
+                multipartFormData: multipartFormData,
+                to: request.url,
+                method: request.method,
+                headers: request.headers,
+                interceptor: interceptor
+            )
+            .validate(validator)
+            .uploadProgress(closure: progress)
+            .responseJSON { responseData in
+                self.logger?.writeResponseLog(dataResponse: responseData)
+                
+                status?(responseData.response?.statusCode)
+                
+                switch responseData.result {
+                case .success(let data):
+                    result?(.success(Response(json: JSON(data))))
+                case .failure(let error):
+                    result?(.failure(error))
+                }
+            }
+    }
+    
 }
