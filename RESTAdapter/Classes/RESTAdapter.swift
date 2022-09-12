@@ -21,21 +21,15 @@ public final class RESTAdapter {
     
     /// Текущая сессия
     private var session: Alamofire.Session
-    private var logger: RESTLogger?
     
     // MARK: - Lifecycle
     
     public init() {
         session = Alamofire.Session.default
-        logger = nil
     }
     
-    public init(
-        session: Alamofire.Session,
-        logger: RESTLogger? = nil
-    ) {
+    public init(session: Alamofire.Session) {
         self.session = session
-        self.logger = logger
     }
     
     // MARK: - Public Implementation
@@ -44,12 +38,6 @@ public final class RESTAdapter {
     /// - Parameter session: Обновлённая сессия адаптера
     public func update(session: Alamofire.Session) {
         self.session = session
-    }
-    
-    /// Обновить рабочую сессию адаптера
-    /// - Parameter session: Обновлённая сессия адаптера
-    public func update(logger: RESTLogger) {
-        self.logger = logger
     }
     
     /// Метод для выполнения всех запросов
@@ -77,8 +65,6 @@ public final class RESTAdapter {
             )
             .validate(validator)
             .responseJSON { responseData in
-                self.logger?.writeResponseLog(dataResponse: responseData)
-                
                 status?(responseData.response?.statusCode)
                 
                 switch responseData.result {
@@ -108,8 +94,6 @@ public final class RESTAdapter {
             )
             .validate(validator)
             .response { responseData in
-                self.logger?.writeResponseLog(dataResponse: responseData)
-                
                 status?(responseData.response?.statusCode)
                 
                 switch responseData.result {
@@ -139,8 +123,6 @@ public final class RESTAdapter {
             )
             .validate(validator)
             .response { responseData in
-                self.logger?.writeResponseLog(dataResponse: responseData)
-                
                 status?(responseData.response?.statusCode)
                 
                 switch responseData.result {
@@ -172,8 +154,6 @@ public final class RESTAdapter {
             .validate(validator)
             .uploadProgress(closure: progress)
             .responseJSON { responseData in
-                self.logger?.writeResponseLog(dataResponse: responseData)
-                
                 status?(responseData.response?.statusCode)
                 
                 switch responseData.result {

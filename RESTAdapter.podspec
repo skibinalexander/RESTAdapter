@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'RESTAdapter'
-  s.version          = '0.2.2'
+  s.version          = '0.2.3'
   s.summary          = 'Network adapter for Alamofire library implementation with SwiftyJSON parser'
   s.description      = <<-DESC
 TODO: Add long description of the pod here.
